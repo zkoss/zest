@@ -8,9 +8,12 @@ Documentation
 
 Maven
 
-`<dependency>
-   <groupId>org.zkoss.zest</groupId>
-   <artifactId>zest</artifactId>
-   <version>1.1.0</version>
-</dependency>`
+	<dependency>
+	   <groupId>org.zkoss.zest</groupId>
+	   <artifactId>zest</artifactId>
+	   <version>1.1.0</version>
+	</dependency>
 
+License
+
+ * [LGPL v2.1](http://www.gnu.org/licenses/lgpl-2.1.html)
