@@ -1,0 +1,6 @@
+../dist/lib/ext/zcommon.jar
+../dist/lib/ext/zweb.jar
+../dist/lib/ext/zk.jar
+../dist/lib/ext/zul.jar
+../dist/lib/ext/servlet-api.jar
+../dist/lib/zest.jar

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zest.xml
+	Purpose:
+		The configuration of ZEST examples
+	Description:
+		
+	History:
+		Wed Mar  2 18:26:19 TST 2011, Created by tomyeh
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+
+<zest>
+	<!-- Specifies a taglib that defines EL functions.
+	You could specify any number of taglibs if your EL expressions need
+	<taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"/>
+	-->
+	<!-- Specifies a method that can be used in EL
+	You could specify any number of methods if your EL expressions need
+	<xel-method prefix="c" name="forName" class="java.lang.Class"
+		signature="java.lang.Class forName(java.lang.String)"/>
+	-->
+
+    <!-- Specifies the extension that ZEST shall handle.
+    	Default: empty (means ZEST handles only paths without any extension)
+    	To specify multiple extensions, you could separate them by comma.
+    	Example, <extensions>, .do, .action</extensions> means
+    	no extension, .do and .action extensions.
+   	<extensions></extensions>
+    -->
+    <!-- Specifies the error handler
+    	Default: none (the exception is thrown up without any processing)
+    	
+	<error-handler-class></error-handler-class>
+	-->
+
+	<!-- An action definition
+		path: a request path (where regular expressions are allowed)
+	-->
+	<action path="/hello" class="org.zkoss.zest.examples.hello.HelloWorldAction">
+		<result name="success">/WEB-INF/hello/HelloWorld.jsp</result>
+	</action>
+
+	<!-- A RESTful example
+	-->
+	<xel-method prefix="c" name="toMethodName"
+			class="org.zkoss.zest.examples.rest.RESTfulAction"
+		signature="java.lang.String toMethodName(java.lang.String)"/>
+	<action path="/rest" method="${c:toMethodName(request.method)}"
+	class="org.zkoss.zest.examples.rest.RESTfulAction">
+		<result>/WEB-INF/rest/RESTfulView.jsp</result>
+	</action>
+</zest>

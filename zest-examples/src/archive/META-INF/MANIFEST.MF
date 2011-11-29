@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: ZEST Examples
+Specification-Version: 1.1.0
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zest.examples
+Implementation-URL: http://www.zkoss.org/prj/zest-examples
+Implementation-Version: 1.1.0
+Implementation-Vendor: Potix Corporation

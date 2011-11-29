@@ -1,0 +1,7 @@
+D.ON=true
+javadoc=~/prj/javadoc-zest
+unzip=true
+debug=true
+optimize=true
+#start.service=Apache Tomcat 6
+version=1.1.0

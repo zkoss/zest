@@ -1,0 +1,265 @@
+#!/bin/bash
+# release
+#
+#{{IS_NOTE
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Mon Nov 14 14:29:09     2005, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+maindir="$(pwd)"
+cd $maindir
+echo "Working directory $maindir"
+
+stamp=$(date +%Y-%m-%d)
+target=$1
+
+setting=build.setting.local
+if [ ! -f $setting ] ; then
+	setting=build.setting
+	if [ ! -f $setting ] ; then
+		echo $setting must be specified
+		exit 1
+	fi
+fi
+javadocdir=$(grep '^javadoc' $setting)
+javadocdir=${javadocdir#javadoc=}
+if [ "$javadocdir" = "" ] ; then
+	echo javadoc must be specified in $setting
+	exit 1
+fi
+javadocdir=${javadocdir/\~/$HOME}
+if [ ! -d "$javadocdir" ] ; then
+	echo $javadocdir is not found
+	exit 1
+fi
+javadocdir=${javadocdir/\~/$HOME}
+#if [ ! -d "$javadocdir/jsdoc" ] ; then
+#	echo $javadocdir/jsdoc is not found
+#	exit 1
+#fi
+
+ver=$(grep '^version=' $setting)
+ver=${ver#version=}
+
+#jar
+if [ "$target" == "official" ] ; then
+	binnm=zest-bin-$ver
+	demonm=zest-demo-$ver
+	javadocnm=zest-javadoc-$ver
+#	jsdocnm=zest-jsdoc-$ver
+	srcnm=zest-src-$ver
+elif [ "$target" == "" ] || [ "$target" == "daily" ] ; then
+	target=daily
+
+	binnm=zest-bin-$ver-$stamp
+	demonm=zest-demo-$ver-$stamp
+	javadocnm=zest-javadoc-$ver-$stamp
+#	jsdocnm=zest-jsdoc-$ver-$stamp
+	srcnm=zest-src-$ver-$stamp
+else
+	echo "Usage: release [ official | daily ]"
+	echo Default: daily
+	exit 1
+fi
+
+echo "Release $binnm..."
+
+rm -rf /tmp/zest
+rm -rf /tmp/maven
+
+#build *-all.war
+rm -rf dist/lib/zest-examples*.war
+cp -f zest-examples/war.libs.all zest-examples/war.libs
+./build clean zest-examples
+./build zest-examples
+
+mv dist/lib/zest-examples.war dist/lib/zest-examples-all.war
+
+cp -f zest-examples/war.libs.minimal zest-examples/war.libs
+./build clean zest-examples
+./build zest-examples
+
+#Prepare the source codes
+if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
+	mkdir -p /tmp/zest/$srcnm/bin
+	mkdir -p /tmp/zest/$srcnm/dist/src
+	mkdir -p /tmp/zest/$srcnm/doc
+	chmod -R 755 $maindir
+	echo Prepare ${srcnm}.zip
+
+	cd $maindir
+	cp bin/* /tmp/zest/$srcnm/bin
+	cp build* /tmp/zest/$srcnm
+	cp -rp bin /tmp/zest/$srcnm
+	cp -rp zest /tmp/zest/$srcnm
+
+	cp doc/COPYING doc/release-note /tmp/zest/$srcnm/doc
+
+	cd /tmp/zest/$srcnm
+	rm -rf zest/debug
+	find -name .svn | xargs rm -rf
+
+	cd /tmp/zest
+
+	#prepare *-sources.jar
+	echo Prepare '*-sources.jar'
+	mkdir -p src/zest
+	cd $srcnm
+
+	cp -rp zest/codegen/* zest/src/* ../src/zest
+
+	cd ..
+	rm -rf src/*/archive
+
+	echo Output '*-sources.jar'
+	cd src
+
+	find -name 'package.html' | xargs rm -rf
+	jar cfM zest-sources.jar -C zest .
+
+	chmod 644 *.jar
+	mv *-sources.jar ..
+	cd ..
+	rm -rf src
+
+	cd $maindir
+
+	mv -f /tmp/zest/*-sources.jar /tmp/zest/$srcnm/dist/src
+
+	cd /tmp/zest
+	echo Output ${srcnm}.zip
+	zip -qr9 ${srcnm}.zip $srcnm
+
+	#Prepare the binary release
+	mkdir -p /tmp/zest/$binnm/dist/lib
+	#mkdir -p /tmp/zest/$binnm/dist/WEB-INF/tld/
+	#mkdir -p /tmp/zest/$binnm/dist/xsd
+	mkdir -p /tmp/zest/$binnm/doc
+
+	cd $maindir
+
+	#mv -f /tmp/zest/*-sources.jar /tmp/zest/$binnm/dist/src
+	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zest/$binnm/dist/lib/
+	cp dist/lib/zest.jar /tmp/zest/$binnm/dist/lib/
+	chmod 644 /tmp/zest/$binnm/dist/lib/*.jar
+	#chmod 644 /tmp/zest/$binnm/dist/lib/*/*.jar
+
+	#cp -rp zest/src/archive/web/WEB-INF/tld/web /tmp/zest/$binnm/dist/WEB-INF/tld
+	#cp zest/src/archive/metainfo/xml/*.xsd /tmp/zest/$binnm/dist/xsd
+	cp doc/COPYING doc/release-note /tmp/zest/$binnm/doc
+
+	#chmod 644 /tmp/zest/$binnm/dist/xsd/*.xsd
+	chmod 644 /tmp/zest/$binnm/doc/release-note
+
+	cd /tmp/zest/$binnm/doc
+	find -name .svn | xargs rm -rf
+
+	#cd /tmp/zest/$binnm/dist/WEB-INF
+	#find -name .svn | xargs rm -rf
+
+	cd /tmp/zest
+
+	#Prepare maven repository
+	function mvnrepo {
+		if [ "$target" == "official" ] ; then
+			local vertamp=`echo $ver | sed 's/-/./'`
+		else
+			local vertamp=`echo $ver | sed 's/-/./'`.$(date +%Y%m%d)
+		fi
+
+		mkdir -p $1
+		
+		local fileName=$1
+		if [ $2 ] ; then
+			cp /tmp/zest/$srcnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
+		elif [ -f "$maindir/dist/lib/$1.nosrc.jar" ] ; then
+			fileName=$1.nosrc
+		fi
+
+		sed -e "s/zk.version>.*<\/zk.version/zk.version>$vertamp<\/zk.version/" $maindir/$1/pom.xml > $maindir/$1/pom2.xml
+		mv -f $maindir/$1/pom2.xml $maindir/$1/pom.xml
+		
+		if [ "$1" != "zest-examples" ] ; then
+			sed -e "s/\${zk.version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
+			cp $maindir/dist/lib/$fileName.jar $1/$1-$vertamp.jar
+			jar cfM $1-$vertamp-bundle.jar -C $1 .
+		fi
+	}
+
+	mkdir -p maven
+	mkdir -p /tmp/maven
+	cd maven
+	mvnrepo zest true
+	mvnrepo zest-examples
+	
+	mv *-bundle.jar /tmp/maven
+	cd ..
+	rm -rf maven
+
+	mkdir -p /tmp/zest/$binnm/dist/src
+
+	cp /tmp/zest/$srcnm/dist/src/* /tmp/zest/$binnm/dist/src/
+
+	#Ouput ${binnm}
+	cp $maindir/doc/COPYING /tmp/zest/$binnm/doc
+
+	if [ "$target" == "official" ] ; then
+		echo Output ${binnm}.tar.gz
+		tar zcf ${binnm}.tar.gz $binnm
+	fi
+
+	echo Output ${binnm}.zip
+	zip -qr9 ${binnm}.zip $binnm
+
+	rm -rf $binnm
+	rm -rf metainfo
+	rm -rf $srcnm
+	rm -rf $binnm
+
+	#Prepare the java doc
+	cd $javadocdir
+
+	echo Output ${javadocnm}.zip
+	zip -qr9 ${javadocnm}.zip zest
+	mv ${javadocnm}.zip /tmp/zest
+
+	#Prepare the JS doc
+	#echo Output ${jsdocnm}.zip
+	#zip -qr9 ${jsdocnm}.zip jsdoc
+	#mv ${jsdocnm}.zip /tmp/zest
+
+	mkdir -p /tmp/zest/$demonm/zest-examples/WebContent
+	mkdir -p /tmp/zest/$demonm/zest-examples/src/org
+	mkdir -p /tmp/zest/$demonm/doc
+
+	cd $maindir
+
+	cp -rp zest-examples/src/archive/* /tmp/zest/$demonm/zest-examples/WebContent
+	#cp -rp zest-examples/codegen/archive/* /tmp/zest/$demonm/zest-examples/WebContent
+	cp -rp zest-examples/src/org/* /tmp/zest/$demonm/zest-examples/src/org
+	cp doc/COPYING doc/release-note /tmp/zest/$demonm/doc
+
+	cp dist/lib/zest-examples.war /tmp/zest/$demonm/zest-examples-min.war
+
+	cd /tmp/zest/$demonm/doc
+	find -name .svn | xargs rm -rf
+
+	cd $maindir
+	mv dist/lib/zest-examples-all.war /tmp/zest/$demonm/zest-examples.war
+
+	cd /tmp/zest
+	find -name .svn | xargs rm -rf
+
+	echo Output ${demonm}.zip
+	zip -qr9 ${demonm}.zip $demonm
+	rm -rf $demonm
+fi

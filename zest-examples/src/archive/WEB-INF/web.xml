@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- web.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar  2 18:28:55 TST 2011, Created by tomyeh
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"> 
+
+	<description><![CDATA[ZEST Examples]]></description>
+	<display-name>zest-examples</display-name>
+
+    <filter>
+        <filter-name>zest</filter-name>
+        <filter-class>org.zkoss.zest.sys.ZestFilter</filter-class>
+        <!-- specifies the class name of the ZEST manager to handle actions
+        	Default: org.zkoss.zest.sys.ZestManager
+        <init-param>
+        	<param-name>manager-class</param-name>
+        	<param-value>foo.MyManager</param-value>
+        </init-param>
+        -->
+        <!-- specifies the class name of the parser used to parse
+        	the configuration file (WEB-INF/zest.xml).
+        	Default: org.zkoss.zest.sys.impl.ParserImpl
+        <init-param>
+        	<param-name>parser-class</param-name>
+        	<param-value>foo.MyParser</param-value>
+        </init-param>
+        -->
+    </filter>
+	<filter-mapping>
+        <filter-name>zest</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>

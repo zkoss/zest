@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- web-fragment.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 23 14:07:01 TST 2011, Created by tomyeh
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+
+<web-fragment>
+	<name>zess</name>
+
+    <filter>
+        <filter-name>ZestFilter</filter-name>
+        <filter-class>org.zkoss.zest.sys.ZestFilter</filter-class>
+    </filter>
+	<filter-mapping>
+        <filter-name>ZestFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-fragment>

@@ -1,0 +1,8 @@
+-----
+1.1.0
+  Features:
+    Allow the user to specify whether to redirect, forward or send-error for a given result
+    ZestManager.pathIgnored() was added to customize what path to ignore
+
+  Bugs:
+    ServletException and IOException shall be passed to container directly without wrapping
