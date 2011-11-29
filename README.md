@@ -6,6 +6,10 @@ Documentation
  * [Javadoc API](http://www.zkoss.org/javadoc/latest/zest/)
  * [FAQ](http://code.google.com/p/zest/wiki/FAQ)
 
+Download
+
+* [Download ](http://code.google.com/p/zest/downloads/list)
+
 Maven
 
 	<dependency>
