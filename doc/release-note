@@ -3,6 +3,7 @@
   Features:
 
   Bugs:
+    Fix release script
 
   Upgrade Notes:
     Update Java compiler source/target to 8

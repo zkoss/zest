@@ -76,6 +76,10 @@ echo "Release $binnm..."
 rm -rf /tmp/zest
 rm -rf /tmp/maven
 
+#build zest.jar
+./build clean zest
+./build zest
+
 #build *-all.war
 rm -rf dist/lib/zest-examples*.war
 cp -f zest-examples/war.libs.all zest-examples/war.libs
@@ -106,7 +110,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cd /tmp/zest/$srcnm
 	rm -rf zest/debug
-	find -name .svn | xargs rm -rf
+	find . -name .svn | xargs rm -rf
 
 	cd /tmp/zest
 
@@ -123,7 +127,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output '*-sources.jar'
 	cd src
 
-	find -name 'package.html' | xargs rm -rf
+	find . -name 'package.html' | xargs rm -rf
 	jar cfM zest-sources.jar -C zest .
 
 	chmod 644 *.jar
@@ -148,7 +152,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd $maindir
 
 	#mv -f /tmp/zest/*-sources.jar /tmp/zest/$binnm/dist/src
-	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zest/$binnm/dist/lib/
+	cp dist/lib/ext/zcommon.jar dist/lib/ext/zcommons-el.jar dist/lib/ext/zweb.jar /tmp/zest/$binnm/dist/lib/
 	cp dist/lib/zest.jar /tmp/zest/$binnm/dist/lib/
 	chmod 644 /tmp/zest/$binnm/dist/lib/*.jar
 	#chmod 644 /tmp/zest/$binnm/dist/lib/*/*.jar
@@ -161,10 +165,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	chmod 644 /tmp/zest/$binnm/doc/release-note
 
 	cd /tmp/zest/$binnm/doc
-	find -name .svn | xargs rm -rf
+	find . -name .svn | xargs rm -rf
 
 	#cd /tmp/zest/$binnm/dist/WEB-INF
-	#find -name .svn | xargs rm -rf
+	#find . -name .svn | xargs rm -rf
 
 	cd /tmp/zest
 
@@ -251,13 +255,13 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/zest-examples.war /tmp/zest/$demonm/zest-examples-min.war
 
 	cd /tmp/zest/$demonm/doc
-	find -name .svn | xargs rm -rf
+	find . -name .svn | xargs rm -rf
 
 	cd $maindir
 	mv dist/lib/zest-examples-all.war /tmp/zest/$demonm/zest-examples.war
 
 	cd /tmp/zest
-	find -name .svn | xargs rm -rf
+	find . -name .svn | xargs rm -rf
 
 	echo Output ${demonm}.zip
 	zip -qr9 ${demonm}.zip $demonm
