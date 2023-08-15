@@ -5,6 +5,7 @@
   Bugs:
 
   Upgrade Notes:
+    Update Java compiler source/target to 8
 
 -----
 1.1.0
