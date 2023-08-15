@@ -6,6 +6,7 @@
 
   Upgrade Notes:
     Update Java compiler source/target to 8
+    Update zweb to 9.6.0
 
 -----
 1.1.0

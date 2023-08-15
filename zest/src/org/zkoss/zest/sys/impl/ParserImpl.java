@@ -30,6 +30,7 @@ import org.zkoss.idom.Item;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.xel.VariableResolver;
+import org.zkoss.xel.taglib.FunctionDefinition;
 import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.MethodFunction;
@@ -63,7 +64,7 @@ public class ParserImpl implements Parser {
 	public Configuration parse(Element root, Locator loc) throws Exception {
 		final List<ActionDefinition> defs = new LinkedList<ActionDefinition>();
 		final List<Taglib> taglibs = new LinkedList<Taglib>();
-		final List<Object[]> xelmtds = new LinkedList<Object[]>();
+		final List<FunctionDefinition> xelmtds = new LinkedList<FunctionDefinition>();
 		final List<VariableResolver> resolvers = new LinkedList<VariableResolver>();
 		String[] exts = null;
 		ErrorHandler errh = null;
@@ -117,7 +118,7 @@ public class ParserImpl implements Parser {
 			el.getAttributeValue("method"), results);
 	}
 	/** Parse the XEL method. */
-	private static void parseXelMethod(List<Object[]> xelmtds, Element el)
+	private static void parseXelMethod(List<FunctionDefinition> xelmtds, Element el)
 	throws Exception {
 		final String prefix = IDOMs.getRequiredAttributeValue(el, "prefix");
 		noELnorEmpty("prefix", prefix, el);
@@ -139,7 +140,7 @@ public class ParserImpl implements Parser {
 		}
 		if ((mtd.getModifiers() & Modifier.STATIC) == 0)
 			throw new ZestException("Not a static method: "+mtd+", "+el.getLocator());
-		xelmtds.add(new Object[] {prefix, nm, new MethodFunction(mtd)});
+		xelmtds.add(new FunctionDefinition(prefix, nm, new MethodFunction(mtd)));
 	}
 	//parse extensions
 	private static String[] parseExtensions(String extensions) {

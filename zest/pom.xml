@@ -23,14 +23,14 @@
 	<repositories>
 		<repository>
 			<id>zk repository</id>
-			<url>http://mavensync.zkoss.org/maven2</url>
+			<url>https://mavensync.zkoss.org/maven2</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>zkmaven</id>
 			<name>ZK Maven Plugin Repository</name>
-			<url>http://mavensync.zkoss.org/maven2</url>
+			<url>https://mavensync.zkoss.org/maven2</url>
 		</pluginRepository>
 		<pluginRepository>
 			<releases>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
 			<artifactId>zweb</artifactId>
-			<version>5.0.0</version>
+			<version>9.6.0</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
