@@ -6,7 +6,7 @@
 	<groupId>org.zkoss.zest</groupId>
 	<artifactId>zest</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<name>ZK RESTful Framework</name>
 	<url>http://www.zkoss.org/zest</url>
 	<description>ZK RESTful Framework</description>
@@ -18,7 +18,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://zest.googlecode.com/svn/releases/1.1.0/zest</url>
+		<url>http://zest.googlecode.com/svn/releases/1.2.0/zest</url>
 	</scm>
 	<repositories>
 		<repository>

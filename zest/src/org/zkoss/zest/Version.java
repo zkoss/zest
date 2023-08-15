@@ -20,5 +20,5 @@ package org.zkoss.zest;
 public class Version {
 	/** The release version. The official version.
 	 */
-	public static final String RELEASE = "1.1.0";
+	public static final String RELEASE = "1.2.0";
 }

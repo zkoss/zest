@@ -1,4 +1,12 @@
 -----
+1.2.0
+  Features:
+
+  Bugs:
+
+  Upgrade Notes:
+
+-----
 1.1.0
   Features:
     Allow the user to specify whether to redirect, forward or send-error for a given result
