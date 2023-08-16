@@ -24,8 +24,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
-import org.zkoss.util.logging.Log;
 
 import org.zkoss.zest.sys.Parser;
 import org.zkoss.zest.sys.impl.ParserImpl;
@@ -40,7 +42,7 @@ import org.zkoss.zest.sys.impl.ParserImpl;
  * @author tomyeh
  */
 public class ZestFilter implements Filter {
-	private static final Log log = Log.lookup(ZestManager.class);
+	private static final Logger log = LoggerFactory.getLogger(ZestManager.class);
 
 	private ZestManager _manager;
 
@@ -74,7 +76,7 @@ public class ZestFilter implements Filter {
 		_manager.init(ctx, parser);
 
 		if (oldManager != null)
-			log.warning(oldManager+" is replaced"+_manager);
+			log.warn(oldManager+" is replaced"+_manager);
 	}
 	private static Object newInstance(String clsnm, Class klass) throws ServletException {
 		final Object o;

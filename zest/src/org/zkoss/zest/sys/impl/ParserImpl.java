@@ -21,9 +21,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Classes;
 import org.zkoss.util.resource.Locator;
-import org.zkoss.util.logging.Log;
 import org.zkoss.idom.Document;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.Item;
@@ -44,7 +46,7 @@ import org.zkoss.zest.ZestException;
  * @author tomyeh
  */
 public class ParserImpl implements Parser {
-	private static final Log log = Log.lookup(ParserImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(ParserImpl.class);
 
 	public ParserImpl() {
 	}
@@ -54,7 +56,7 @@ public class ParserImpl implements Parser {
 		try {
 			return parse(new SAXBuilder(true, false, true).build(url).getRootElement(), loc);
 		} catch (Throwable ex) {
-			log.realCauseBriefly("Failed to parse "+url, ex);
+			log.error("Failed to parse "+url, ex);
 			if (ex instanceof Error) throw (Error)ex;
 			throw (Exception)ex;
 		}

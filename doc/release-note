@@ -8,6 +8,7 @@
   Upgrade Notes:
     Update Java compiler source/target to 8
     Update zweb to 9.6.0
+    Use SLF4J API for logging
 
 -----
 1.1.0

@@ -102,7 +102,7 @@ public class ActionDefinitionImpl implements ActionDefinition {
 			else
 				throw new ClassNotFoundException("Class expected in "+_klassV+", not "+c);
 		}
-		return klass.newInstance();
+		return klass.getDeclaredConstructor().newInstance();
 	}
 	public String execute(ActionContext ac, Object action) throws Exception {
 		final String mtdnm = (String)_method.getValue(ac);
